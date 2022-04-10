@@ -1,0 +1,188 @@
+import json
+from redbot.core import commands
+from discord.utils import get
+import discord
+
+intro="""Now entering the TNP citizen, Deputy Minister of Defense,
+Maker of so many card tools and several R/D ones too, NS Trading cards & Potato Alliance moderator,
+Former Epic Rarity, 4th most valuable deck, (7x) Card Olympics Host, Member of Petz, Commended by the SC,
+Ex-General of Mordor, Overall NPA Legend, Fastest Trader in the Midwest, (1x) SC Author, Potato General,
+He Who Bested so many other traders using TCALS, Supreme Owner of many card farms and cards,
+Anti-Fascist King, NSTC Prize distributor, Big Farma founder, he who nuked Noahs Almighty Second Country,
+Nine thousand "Absolute Fucking Godgamer" three"""
+lasttarg="\n"
+target=[]
+
+class MyCog2(commands.Cog):
+    lasttarg="\n"
+    def __init__(self, bot):
+        self.bot = bot
+        self.bot.target=[]
+        self.bot.tarcount=int(0)
+
+    @commands.command()
+    async def test(self, ctx):
+        """This is to see if the Cog is loaded correctly"""
+        await  ctx.send("I work")
+
+    @commands.has_role('NPA Soldier')
+    @commands.command(pass_context=True,alias=['here'])
+    async def join(self, ctx):
+        """Adds the Mini Ops role"""
+        member = ctx.author
+        var = discord.utils.get(ctx.guild.roles, name = "miniops")
+        # This is the code needed to give a user a role
+        member = ctx.message.author # Member object that you want to add the role to
+        await member.add_roles(var) # Adds the role to the member
+        given_name="spiderweb"
+        channel = discord.utils.get(ctx.guild.channels, name=given_name)
+        channel_id = channel.id
+        channel_out = ctx.guild.get_channel(channel_id)
+        if "9003" in ctx.author.name:
+             await channel_out.send(intro +"Oh ya I almost forgot to ping him as well "+ ctx.author.mention)
+        else:
+             await channel_out.send("Now presenting the most honorable " +ctx.author.mention)
+
+    @commands.has_role('NPA Officer')
+    @commands.command(pass_context=True,alias=['update_end'])
+    async def end_update(self, ctx):
+        """Ends a regular update with report"""
+        #This also does stuff like remove roles and lists who had them
+        target=[]
+        tarcount=0
+        list=discord.utils.get(ctx.guild.roles, name='miniops')
+        #CHANGE TO REPORTS CHANNEL ******************************************************
+        given_name="npa-reports"
+        channel = discord.utils.get(ctx.guild.channels, name=given_name)
+        channel_id = channel.id
+        channel_out = ctx.guild.get_channel(channel_id)
+        #CHANGE THE ABOVE TO REPORTS CHANNEL ********************************************
+        memberlist=[]
+        for person in ctx.guild.members:
+            outbutt="The following members partook: \n"
+            if list in person.roles:
+               for m in ctx.guild.members:
+                  await m.remove_roles(list)
+               memberlist.append(f"{person.mention}")
+            for grunt in memberlist:
+               outbutt= outbutt+grunt+"\n"
+        with open("/home/pi/mycogs/HereCog/hits","r+") as ff:
+            fflist=ff.readlines()
+            for each in fflist:
+                outbutt=outbutt+each
+        open("/home/pi/mycogs/HereCog/hits", mode='w').close()
+        await channel_out.send(outbutt)
+        
+    @commands.has_role('NPA Officer')
+    @commands.command(pass_context=True)
+    async def end_joint_update(self, ctx):
+        """Ends a joint update with a report"""
+        #This also does stuff like remove roles and lists who had them
+        target=[]
+        tarcount=0
+        list=discord.utils.get(ctx.guild.roles, name='Joint Ops')
+        #CHANGE TO REPORTS CHANNEL ******************************************************
+        given_name="npa-reports"
+        channel = discord.utils.get(ctx.guild.channels, name=given_name)
+        channel_id = channel.id
+        channel_out = ctx.guild.get_channel(channel_id)
+        #CHANGE THE ABOVE TO REPORTS CHANNEL ********************************************
+        memberlist=[]
+        for person in ctx.guild.members:
+            outbutt="The following members partook: \n"
+            if list in person.roles:
+               for m in ctx.guild.members:
+                  await m.remove_roles(list)
+               memberlist.append(f"{person.mention}")
+            for grunt in memberlist:
+               outbutt= outbutt+grunt+"\n"
+        with open("/home/pi/mycogs/HereCog/hits","r+") as ff:
+            fflist=ff.readlines()
+            for each in fflist:
+                outbutt=outbutt+each
+        open("/home/pi/mycogs/HereCog/hits", mode='w').close()
+        await channel_out.send(outbutt)
+    @commands.command(pass_context=True,alias=["joint_join","join_joint"])
+    async def joint_here(self, ctx):
+        """Joins the Joint op channel"""
+        member = ctx.author
+        var = discord.utils.get(ctx.guild.roles, name = "Joint Ops")
+        # This is the code needed to give a user a role
+        member = ctx.message.author # Member object that you want to add the role to
+        await member.add_roles(var) # Adds the role to the member
+#*************************************************************8
+        given_name="blazing-joints"
+        channel = discord.utils.get(ctx.guild.channels, name=given_name)
+        channel_id = channel.id
+        channel_out = ctx.guild.get_channel(channel_id)
+#**************************************************************
+        if "9003" in ctx.author.name:
+             await channel_out.send(intro +"Oh ya I almost forgot to ping him as well "+ ctx.author.mention)
+        else:
+             await channel_out.send("Now presenting the most honorable "+ ctx.author.mention)
+
+    @commands.has_role('Joint Ops')
+    @commands.command(pass_context=True)
+    async def bye(self, ctx):
+        """Leaves the op channel"""
+        member = ctx.author
+        var = discord.utils.get(ctx.guild.roles, name = "Joint Ops")
+        member = ctx.message.author # Member object that you want to add the role to
+        await member.remove_roles(var)
+        await ctx.send("Bye!")
+
+    @commands.has_role('miniops')
+    @commands.command(pass_context=True)
+    async def bye(self, ctx):
+        """Leaves the op channel"""
+        member = ctx.author
+        var = discord.utils.get(ctx.guild.roles, name = "miniops")
+        member = ctx.message.author # Member object that you want to add the role to
+        await member.remove_roles(var)
+        await ctx.send("Bye Freind!")
+    @commands.command(pass_context=True)
+    @commands.has_role('NPA Officer')
+    async def add(self,ctx,*args):
+        """Adds a list of targets use " " to surround each target"""
+        #adds targets to the list
+        for every in args:
+             target.append(every)
+        await ctx.send('{} targets added'.format(len(args)))
+        with open("info.txt", "w") as f:
+             for each in target:
+                 f.write(each+",")
+
+    @commands.command(pass_context=True)
+    @commands.has_role('NPA Officer')
+    async def clear(self,ctx):
+        """Run this before addding targets to clear everything"""
+        with open("info.txt", 'w') as f:
+             f.truncate(0)
+        with open("/home/pi/mycogs/HereCog/hits","w") as f:
+             f.truncate(0)
+        await ctx.send("Cleared the current list")
+    @commands.command(pass_context=True,aliases=['H','Hit','h','hit','M','m','Miss','miss'])
+    @commands.has_role('NPA Officer')
+    async def next(self,ctx):
+        """Next target asumming a miss.  Use Hit/Miss for auto reports"""
+        if ctx.invoked_with == 'H' or ctx.invoked_with == 'Hit' or ctx.invoked_with == 'h' or ctx.invoked_with == 'hit':
+            with open("/home/pi/mycogs/HereCog/hits","a+") as fhit:
+                fhit.write(MyCog2.lasttarg+"\n")
+        with open("info.txt", 'r+') as f:
+            lines = f.readline()
+            if lines:
+                targets = lines.replace("\0","").split(",")
+                try:
+                    if len(str(targets[0])) < 1:
+                       raise Exception(" ")
+                    await ctx.send("Next target is: "+ str(targets[0]))
+                    MyCog2.lasttarg=str(targets[0])
+                    del targets[0]
+                    f.truncate(0)
+                    for each in targets:
+                        f.write(each+",")
+                except Exception:
+                    await ctx.send("Thanks for coming out this op is now over! Pleae do ~end_update or ~end_joint_update")
+                    MyCog2.lasttarg=""
+            else:
+                await ctx.send("No targets try using ~add")
