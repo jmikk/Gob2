@@ -1,1 +1,1 @@
-worker: worker: python HereCog.py
+worker:python HereCog.py
